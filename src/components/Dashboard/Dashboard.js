@@ -8,9 +8,8 @@ const Dashboard = () => {
   const [modalIsOpen, setIsOpen] = useState(false);
   const [search, setSearch] = useState('');
 
-  const [currentPage, setCurrentPage] = useState(
-    sessionStorage.getItem('currentPage') || 0
-  );
+  const [currentPage, setCurrentPage] = useState(0);
+  const [currentSearchPage, setCurrentSearchPage] = useState(0);
   function openModal() {
     setIsOpen(true);
   }
@@ -44,7 +43,11 @@ const Dashboard = () => {
       style={{ marginTop: '100px', marginBottom: '100px' }}
     >
       <div className="text-center p-2 bg-secondary text-white rounded-1">
-        Total paid: 20
+        Total paid:
+        {billings.reduce(
+          (partialSum, a) => partialSum + parseInt(a.paidAmount),
+          0
+        )}
       </div>
       <div
         className="bg-secondary my-5 rounded-1"
@@ -83,6 +86,33 @@ const Dashboard = () => {
         setBillings={setBillings}
         billings={billings}
       ></ModalComponent>
+      <div>
+        <div className="text-center">
+          {currentPage > 0 && (
+            <div
+              onClick={() => {
+                setCurrentPage(currentPage - 1);
+                loadBillsFromDB(currentPage - 1);
+              }}
+              className="btn mx-1 btn-info"
+            >
+              Prev
+            </div>
+          )}
+          <div className="btn mx-1 btn-info">{currentPage + 1}</div>
+          {(billings.length === 10 || billings.length >= 10) && (
+            <div
+              onClick={() => {
+                setCurrentPage(currentPage + 1);
+                loadBillsFromDB(currentPage + 1);
+              }}
+              className="btn mx-1 btn-info"
+            >
+              Next
+            </div>
+          )}
+        </div>
+      </div>
     </div>
   );
 };
