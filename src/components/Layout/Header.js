@@ -1,9 +1,6 @@
 import React from 'react';
-import { useHistory } from 'react-router-dom';
 
 const Header = () => {
-  const history = useHistory();
-
   return (
     <div className="container">
       <header className="d-flex flex-wrap align-items-center justify-content-center justify-content-md-between py-3 mb-4 border-bottom">
