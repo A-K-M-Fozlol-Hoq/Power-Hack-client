@@ -16,7 +16,16 @@ const Listings = ({ billings }) => {
           </tr>
         </thead>
         <tbody>
-          <Listing></Listing>
+          {billings.map((billing, index) => (
+            <Listing
+              key={index}
+              _id={billing._id}
+              fullName={billing.fullName}
+              email={billing.email}
+              phone={billing.phone}
+              paidAmount={billing.paidAmount}
+            ></Listing>
+          ))}
         </tbody>
       </table>
     </div>

@@ -1,11 +1,42 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import Listing from './Listing';
 import Listings from './Listings';
-import Modal from './Modal';
+import ModalComponent from './ModalComponent';
 
 const Dashboard = () => {
   const [billings, setBillings] = useState([]);
+  const [modalIsOpen, setIsOpen] = useState(false);
+  const [search, setSearch] = useState('');
 
+  const [currentPage, setCurrentPage] = useState(
+    sessionStorage.getItem('currentPage') || 0
+  );
+  function openModal() {
+    setIsOpen(true);
+  }
+  const loadBillsFromDB = (currentPageToLoad) => {
+    fetch('http://localhost:4000/api/billing-list', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        pageNumber: currentPageToLoad,
+        query: '017',
+      }),
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        console.log(data);
+        setBillings(data);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+  useEffect(() => {
+    loadBillsFromDB();
+  }, []);
   return (
     <div
       className="container"
@@ -22,6 +53,9 @@ const Dashboard = () => {
       >
         <p className="mt-2 text-white">Billings</p>
         <input
+          onChange={(e) => {
+            setSearch(e.target.value);
+          }}
           className="form-control"
           style={{ width: '250px' }}
           type="text"
@@ -30,14 +64,19 @@ const Dashboard = () => {
         <div
           className="btn btn-primary"
           data-bs-toggle="modal"
-          data-bs-target="#exampleModal"
+          onClick={openModal}
         >
           Add New Billing
         </div>
       </div>
 
       <Listings billings={billings}></Listings>
-      <Modal></Modal>
+      <ModalComponent
+        setIsOpen={setIsOpen}
+        modalIsOpen={modalIsOpen}
+        setBillings={setBillings}
+        billings={billings}
+      ></ModalComponent>
     </div>
   );
 };
