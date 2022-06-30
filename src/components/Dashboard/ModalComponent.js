@@ -59,7 +59,16 @@ const ModalComponent = ({ setIsOpen, modalIsOpen, setBillings, billings }) => {
         if (modalData.phone.length === 11 && isNumberValid(modalData.phone)) {
           if (modalData.paidAmount > 0 && modalData.paidAmount < 100000) {
             console.log(modalData);
-
+            setBillings([
+              {
+                _id: 'Generating ID',
+                fullName: modalData.fullName,
+                email: modalData.email,
+                phone: modalData.phone,
+                paidAmount: modalData.paidAmount,
+              },
+              ...billings,
+            ]);
             fetch('http://localhost:4000/api/add-billing', {
               method: 'POST',
               headers: {
@@ -75,11 +84,35 @@ const ModalComponent = ({ setIsOpen, modalIsOpen, setBillings, billings }) => {
             })
               .then((response) => response.json())
               .then((data) => {
-                console.log(data, 'ok');
+                console.log(data, 'ok', data.insertedId);
                 closeModal();
+                setTimeout(() => {
+                  console.log(
+                    "Delayed for 0.5 second to show'Generating ID' clearly."
+                  );
+                  const oldLists = billings.filter(checkBilling);
+                  function checkBilling(billing) {
+                    return billing._id !== 'Generating ID';
+                  }
+                  setBillings([
+                    {
+                      _id: data.insertedId,
+                      fullName: modalData.fullName,
+                      email: modalData.email,
+                      phone: modalData.phone,
+                      paidAmount: modalData.paidAmount,
+                    },
+                    ...oldLists,
+                  ]);
+                }, 500);
               })
               .catch((error) => {
                 console.error(error, 'last');
+                const oldLists = billings.filter(checkBilling);
+                function checkBilling(billing) {
+                  return billing._id !== 'Generating ID';
+                }
+                setBillings([...oldLists]);
               });
           } else {
             alert('paid amount must be larger than 0 and smaller than 100000');

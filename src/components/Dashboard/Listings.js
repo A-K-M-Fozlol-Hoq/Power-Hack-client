@@ -2,6 +2,10 @@ import React from 'react';
 import Listing from './Listing';
 
 const Listings = ({ billings }) => {
+  const ascendingSortedBilling = billings.sort(function (a, b) {
+    return a.paidAmount - b.paidAmount;
+  });
+  const descendingSortedBilling = ascendingSortedBilling.reverse();
   return (
     <div>
       <table className="table container text-center">
@@ -16,7 +20,7 @@ const Listings = ({ billings }) => {
           </tr>
         </thead>
         <tbody>
-          {billings.map((billing, index) => (
+          {descendingSortedBilling.map((billing, index) => (
             <Listing
               key={index}
               _id={billing._id}

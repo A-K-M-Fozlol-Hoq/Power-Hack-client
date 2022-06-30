@@ -43,13 +43,15 @@ const Dashboard = () => {
       className="container"
       style={{ marginTop: '100px', marginBottom: '100px' }}
     >
+      <div className="text-center p-2 bg-secondary text-white rounded-1">
+        Total paid: 20
+      </div>
       <div
-        className="bg-secondary my-5"
+        className="bg-secondary my-5 rounded-1"
         style={{
           display: 'grid',
           gridTemplateColumns: '80px 1fr 150px',
           padding: '5px',
-          borderRadius: '10px',
         }}
       >
         <p className="mt-2 text-white">Billings</p>
