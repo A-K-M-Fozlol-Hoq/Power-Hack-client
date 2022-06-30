@@ -7,29 +7,41 @@ const Login = (props) => {
     password: '',
   });
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    console.log(loginData);
-  };
-
-  const isStartsWithAlphabetic = (string) => {
-    const char = string.charAt(0);
-    return /[a-zA-Z]/.test(char);
-  };
-
-  const isNameValid = (name) => {
-    if (name.length >= 2 && name.length <= 50) {
-      const isFieldValid =
-        /^[a-z ,.'-]+$/i.test(name) && isStartsWithAlphabetic(name);
-      return isNameValid;
-    } else {
-      return false;
-    }
-  };
-
   const isEmailValid = (email) => {
     let isValid = /\S+@\S+\.\S+/.test(email);
     return isValid;
+  };
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    if (isEmailValid(loginData.email)) {
+      if (loginData.password.length > 0 && loginData.password.length < 50) {
+        fetch('http://localhost:4000/api/login', {
+          method: 'POST',
+          headers: { 'content-type': 'application/json' },
+          body: JSON.stringify({
+            email: loginData.email,
+            password: loginData.password,
+          }),
+        })
+          .then((response) => response.json())
+          .then((data) => {
+            if (data) {
+              // console.log(data);
+              sessionStorage.setItem('token', data.token);
+            } else {
+              // console.log( false);
+            }
+          })
+          .catch((error) => {
+            console.error(error);
+          });
+      } else {
+        alert('password length must be between 6 to 50');
+      }
+    } else {
+      alert('Please enter a valid email');
+    }
   };
 
   return (

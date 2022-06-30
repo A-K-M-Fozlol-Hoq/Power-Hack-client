@@ -9,9 +9,62 @@ const SignUp = (props) => {
     confirmPassword: '',
   });
 
+  const isStartsWithAlphabetic = (string) => {
+    const char = string.charAt(0);
+    return /[a-zA-Z]/.test(char);
+  };
+
+  const isNameValid = (name) => {
+    if (name.length >= 2 && name.length <= 50) {
+      const isFieldValid =
+        /^[a-z ,.'-]+$/i.test(name) && isStartsWithAlphabetic(name);
+      return isFieldValid;
+    } else {
+      return false;
+    }
+  };
+
+  const isEmailValid = (email) => {
+    let isValid = /\S+@\S+\.\S+/.test(email);
+    return isValid;
+  };
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log(signupData);
+    if (isNameValid(signupData.name)) {
+      if (isEmailValid(signupData.email)) {
+        if (signupData.password.length > 5 && signupData.password.length < 50) {
+          if (signupData.password === signupData.confirmPassword) {
+            console.log(signupData);
+
+            fetch('http://localhost:4000/api/registration', {
+              method: 'POST',
+              headers: { 'content-type': 'application/json' },
+              body: JSON.stringify({
+                fullName: signupData.fullName,
+                email: signupData.email,
+                password: signupData.password,
+              }),
+            })
+              .then((response) => response.json())
+              .then((data) => {
+                console.log(data, 'ok');
+                sessionStorage.setItem('token', data.token);
+              })
+              .catch((error) => {
+                console.error(error, 'last');
+              });
+          } else {
+            alert('Password is not matching with confirm password');
+          }
+        } else {
+          alert('password length must be between 6 to 50');
+        }
+      } else {
+        alert('Please enter a valid email');
+      }
+    } else {
+      console.log('Please enter a valid name');
+    }
   };
 
   return (
