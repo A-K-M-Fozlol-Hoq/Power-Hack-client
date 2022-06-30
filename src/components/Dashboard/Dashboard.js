@@ -1,29 +1,45 @@
-import React from 'react';
+import React, { useState } from 'react';
+import Listing from './Listing';
+import Listings from './Listings';
+import Modal from './Modal';
 
 const Dashboard = () => {
-  console.log(sessionStorage.getItem('token'));
-  fetch('http://localhost:4000/api/add-billing', {
-    method: 'POST',
-    headers: {
-      'content-type': 'application/json',
-      token: `bearer ${sessionStorage.getItem('token')}`,
-    },
-    body: JSON.stringify({
-      fullName: ' signupData.fullName',
-      email: 'signupData.email',
-      phone: 'signupData.email',
-      paidAmount: 12,
-    }),
-  })
-    .then((response) => response.json())
-    .then((data) => {
-      console.log(data, 'ok');
-      sessionStorage.setItem('token', data.token);
-    })
-    .catch((error) => {
-      console.error(error, 'last');
-    });
-  return <div>Dashboard</div>;
+  const [billings, setBillings] = useState([]);
+
+  return (
+    <div
+      className="container"
+      style={{ marginTop: '100px', marginBottom: '100px' }}
+    >
+      <div
+        className="bg-secondary my-5"
+        style={{
+          display: 'grid',
+          gridTemplateColumns: '80px 1fr 150px',
+          padding: '5px',
+          borderRadius: '10px',
+        }}
+      >
+        <p className="mt-2 text-white">Billings</p>
+        <input
+          className="form-control"
+          style={{ width: '250px' }}
+          type="text"
+          placeholder="search"
+        />
+        <div
+          className="btn btn-primary"
+          data-bs-toggle="modal"
+          data-bs-target="#exampleModal"
+        >
+          Add New Billing
+        </div>
+      </div>
+
+      <Listings billings={billings}></Listings>
+      <Modal></Modal>
+    </div>
+  );
 };
 
 export default Dashboard;

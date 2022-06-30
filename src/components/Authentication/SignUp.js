@@ -49,6 +49,7 @@ const SignUp = (props) => {
               .then((data) => {
                 console.log(data, 'ok');
                 sessionStorage.setItem('token', data.token);
+                window.location.href = '/dashboard';
               })
               .catch((error) => {
                 console.error(error, 'last');
@@ -63,7 +64,7 @@ const SignUp = (props) => {
         alert('Please enter a valid email');
       }
     } else {
-      console.log('Please enter a valid name');
+      alert('Please enter a valid name');
     }
   };
 

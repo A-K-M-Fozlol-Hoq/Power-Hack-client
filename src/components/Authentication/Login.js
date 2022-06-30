@@ -29,6 +29,7 @@ const Login = (props) => {
             if (data) {
               // console.log(data);
               sessionStorage.setItem('token', data.token);
+              window.location.href = '/dashboard';
             } else {
               // console.log( false);
             }
