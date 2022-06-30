@@ -42,10 +42,32 @@ const Header = () => {
         </ul>
 
         <div className="col-md-3 text-end">
+          {sessionStorage.getItem('token') ? (
+            <button
+              type="button"
+              onClick={() => {
+                sessionStorage.clear();
+                window.location.href = '/login';
+              }}
+              className="btn btn-primary"
+            >
+              Logout
+            </button>
+          ) : (
+            <button
+              type="button"
+              onClick={() => (window.location.href = '/login')}
+              className="btn btn-primary"
+            >
+              Login
+            </button>
+          )}
+
           <button
             type="button"
             onClick={() => (window.location.href = '/dashboard')}
             className="btn btn-primary"
+            style={{ marginLeft: '20px' }}
           >
             Dashboard
           </button>

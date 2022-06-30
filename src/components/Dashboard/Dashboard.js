@@ -19,10 +19,11 @@ const Dashboard = () => {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
+        token: `bearer ${sessionStorage.getItem('token')}`,
       },
       body: JSON.stringify({
         pageNumber: currentPageToLoad,
-        query: '017',
+        query: search,
       }),
     })
       .then((res) => res.json())
@@ -52,15 +53,18 @@ const Dashboard = () => {
         }}
       >
         <p className="mt-2 text-white">Billings</p>
-        <input
-          onChange={(e) => {
-            setSearch(e.target.value);
-          }}
-          className="form-control"
-          style={{ width: '250px' }}
-          type="text"
-          placeholder="search"
-        />
+        <div className="d-flex">
+          <input
+            onChange={(e) => {
+              setSearch(e.target.value);
+            }}
+            className="form-control"
+            style={{ width: '250px' }}
+            type="text"
+            placeholder="search"
+          />
+          <div className="btn btn-primary mx-2 my-2 px-5">filter</div>
+        </div>
         <div
           className="btn btn-primary"
           data-bs-toggle="modal"
