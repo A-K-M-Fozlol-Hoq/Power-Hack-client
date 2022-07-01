@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import Modal from 'react-modal';
 const customStyles = {
   content: {
@@ -12,7 +12,14 @@ const customStyles = {
 };
 
 Modal.setAppElement('#root');
-const ModalComponent = ({ setIsOpen, modalIsOpen, setBillings, billings }) => {
+const ModalComponent = ({
+  setIsOpen,
+  modalIsOpen,
+  setBillings,
+  billings,
+  modalDefaultValue,
+  setModalDefaultValue,
+}) => {
   const [modalData, setModalData] = useState({
     fullName: '',
     email: '',
@@ -20,6 +27,16 @@ const ModalComponent = ({ setIsOpen, modalIsOpen, setBillings, billings }) => {
     paidAmount: 0,
   });
   let subtitle;
+  useEffect(() => {
+    if (modalDefaultValue._id) {
+      setModalData({
+        fullName: modalDefaultValue.fullName,
+        email: modalDefaultValue.email,
+        phone: modalDefaultValue.phone,
+        paidAmount: modalDefaultValue.paidAmount,
+      });
+    }
+  }, [modalDefaultValue._id]);
 
   function afterOpenModal() {
     // references are now sync'd and can be accessed.
@@ -54,10 +71,18 @@ const ModalComponent = ({ setIsOpen, modalIsOpen, setBillings, billings }) => {
   };
   const handleSubmit = (e) => {
     e.preventDefault();
-    if (isNameValid(modalData.fullName)) {
-      if (isEmailValid(modalData.email)) {
-        if (modalData.phone.length === 11 && isNumberValid(modalData.phone)) {
-          if (modalData.paidAmount > 0 && modalData.paidAmount < 100000) {
+    if (modalData.fullName && isNameValid(modalData.fullName)) {
+      if (modalData.email && isEmailValid(modalData.email)) {
+        if (
+          modalData.phone &&
+          modalData.phone.length === 11 &&
+          isNumberValid(modalData.phone)
+        ) {
+          if (
+            modalData.paidAmount &&
+            modalData.paidAmount > 0 &&
+            modalData.paidAmount < 100000
+          ) {
             console.log(modalData);
             setBillings([
               {
@@ -128,6 +153,30 @@ const ModalComponent = ({ setIsOpen, modalIsOpen, setBillings, billings }) => {
     }
   };
 
+  const handleSave = (e) => {
+    e.preventDefault();
+    if (isNameValid(modalData.fullName)) {
+      if (isEmailValid(modalData.email)) {
+        if (modalData.phone.length === 11 && isNumberValid(modalData.phone)) {
+          if (modalData.paidAmount > 0 && modalData.paidAmount < 100000) {
+            console.log(modalData, 'funal');
+            // setModalDefaultValue({});
+            // setModalData({});
+            // /api/update-billing/:id
+          } else {
+            alert('paid amount must be larger than 0 and smaller than 100000');
+          }
+        } else {
+          alert('Enter valid bangladeshi phone number');
+        }
+      } else {
+        alert('Please enter a valid email');
+      }
+    } else {
+      alert('Please enter a valid name');
+    }
+  };
+
   return (
     <div>
       <Modal
@@ -143,6 +192,11 @@ const ModalComponent = ({ setIsOpen, modalIsOpen, setBillings, billings }) => {
               Name
             </label>
             <input
+              defaultValue={`${
+                modalDefaultValue.fullName
+                  ? `${modalDefaultValue.fullName}`
+                  : ''
+              }`}
               onChange={(e) => {
                 setModalData({ ...modalData, fullName: e.target.value });
               }}
@@ -157,6 +211,9 @@ const ModalComponent = ({ setIsOpen, modalIsOpen, setBillings, billings }) => {
               Email
             </label>
             <input
+              defaultValue={`${
+                modalDefaultValue.email ? `${modalDefaultValue.email}` : ''
+              }`}
               onChange={(e) => {
                 setModalData({ ...modalData, email: e.target.value });
               }}
@@ -171,6 +228,9 @@ const ModalComponent = ({ setIsOpen, modalIsOpen, setBillings, billings }) => {
               Phone
             </label>
             <input
+              defaultValue={`${
+                modalDefaultValue.phone ? `${modalDefaultValue.phone}` : ''
+              }`}
               onChange={(e) => {
                 setModalData({ ...modalData, phone: e.target.value });
               }}
@@ -185,6 +245,11 @@ const ModalComponent = ({ setIsOpen, modalIsOpen, setBillings, billings }) => {
               Paid Amount
             </label>
             <input
+              defaultValue={`${
+                modalDefaultValue.paidAmount
+                  ? `${modalDefaultValue.paidAmount}`
+                  : ''
+              }`}
               onChange={(e) => {
                 setModalData({
                   ...modalData,
@@ -196,13 +261,23 @@ const ModalComponent = ({ setIsOpen, modalIsOpen, setBillings, billings }) => {
               className="form-control"
             />
           </div>
-          <button
-            type="submit"
-            className="btn btn-primary btn-block mb-3 w-100"
-            onClick={handleSubmit}
-          >
-            Add
-          </button>
+          {modalDefaultValue._id ? (
+            <button
+              type="submit"
+              className="btn btn-primary btn-block mb-3 w-100"
+              onClick={handleSave}
+            >
+              Save Change
+            </button>
+          ) : (
+            <button
+              type="submit"
+              className="btn btn-primary btn-block mb-3 w-100"
+              onClick={handleSubmit}
+            >
+              Add
+            </button>
+          )}
         </form>
         <button className="btn btn-danger w-100" onClick={closeModal}>
           close

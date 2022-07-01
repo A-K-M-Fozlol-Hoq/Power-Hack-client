@@ -1,7 +1,12 @@
 import React from 'react';
 import Listing from './Listing';
 
-const Listings = ({ billings }) => {
+const Listings = ({
+  billings,
+  setBillings,
+  setModalDefaultValue,
+  openModal,
+}) => {
   const ascendingSortedBilling = billings.sort(function (a, b) {
     return a.paidAmount - b.paidAmount;
   });
@@ -28,6 +33,10 @@ const Listings = ({ billings }) => {
               email={billing.email}
               phone={billing.phone}
               paidAmount={billing.paidAmount}
+              setBillings={setBillings}
+              billings={billings}
+              setModalDefaultValue={setModalDefaultValue}
+              openModal={openModal}
             ></Listing>
           ))}
         </tbody>

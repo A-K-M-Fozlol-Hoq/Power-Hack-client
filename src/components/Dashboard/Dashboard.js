@@ -7,6 +7,13 @@ const Dashboard = () => {
   const [billings, setBillings] = useState([]);
   const [modalIsOpen, setIsOpen] = useState(false);
   const [search, setSearch] = useState('');
+  const [modalDefaultValue, setModalDefaultValue] = useState({
+    _id: '',
+    fullName: '',
+    email: '',
+    phone: '',
+    paidAmount: 0,
+  });
 
   const [currentPage, setCurrentPage] = useState(0);
   const [currentSearchPage, setCurrentSearchPage] = useState(0);
@@ -79,12 +86,19 @@ const Dashboard = () => {
         </div>
       </div>
 
-      <Listings billings={billings}></Listings>
+      <Listings
+        billings={billings}
+        setBillings={setBillings}
+        setModalDefaultValue={setModalDefaultValue}
+        openModal={openModal}
+      ></Listings>
       <ModalComponent
         setIsOpen={setIsOpen}
         modalIsOpen={modalIsOpen}
         setBillings={setBillings}
         billings={billings}
+        modalDefaultValue={modalDefaultValue}
+        setModalDefaultValue={setModalDefaultValue}
       ></ModalComponent>
       <div>
         <div className="text-center">
