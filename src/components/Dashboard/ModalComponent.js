@@ -160,9 +160,51 @@ const ModalComponent = ({
         if (modalData.phone.length === 11 && isNumberValid(modalData.phone)) {
           if (modalData.paidAmount > 0 && modalData.paidAmount < 100000) {
             console.log(modalData, 'funal');
-            // setModalDefaultValue({});
-            // setModalData({});
-            // /api/update-billing/:id
+            fetch(
+              `http://localhost:4000/api/update-billing/${modalDefaultValue._id}`,
+              {
+                method: 'PUT',
+                headers: {
+                  'Content-Type': 'application/json',
+                  token: `bearer ${sessionStorage.getItem('token')}`,
+                },
+                body: JSON.stringify({
+                  fullName: modalData.fullName,
+                  email: modalData.email,
+                  phone: modalData.phone,
+                  paidAmount: modalData.paidAmount,
+                }),
+              }
+            )
+              .then((res) => res.json())
+              .then((data) => {
+                console.log(data);
+                if (data.modifiedCount === 1) {
+                  const oldLists = billings.filter(updateBilling);
+                  function updateBilling(billing) {
+                    return billing._id !== modalData._id;
+                  }
+                  setBillings([
+                    {
+                      _id: modalDefaultValue._id,
+                      fullName: modalData.fullName,
+                      email: modalData.email,
+                      phone: modalData.phone,
+                      paidAmount: modalData.paidAmount,
+                    },
+                    ...oldLists,
+                  ]);
+                  setModalDefaultValue({});
+                  setModalData({});
+                  closeModal();
+                  alert(
+                    `updated ${modalData.fullName} successfully from the billing`
+                  );
+                }
+              })
+              .catch((err) => {
+                console.log(err);
+              });
           } else {
             alert('paid amount must be larger than 0 and smaller than 100000');
           }
