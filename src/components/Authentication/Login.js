@@ -16,7 +16,7 @@ const Login = (props) => {
     e.preventDefault();
     if (isEmailValid(loginData.email)) {
       if (loginData.password.length > 0 && loginData.password.length < 50) {
-        fetch('http://localhost:4000/api/login', {
+        fetch('https://tim-sorry-00535.herokuapp.com/api/login', {
           method: 'POST',
           headers: { 'content-type': 'application/json' },
           body: JSON.stringify({

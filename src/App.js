@@ -2,10 +2,10 @@ import { useState } from 'react';
 import './App.css';
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
 import HomePage from './pages/HomePage';
-import NotFound from './components/NotFound/NotFound';
 import PrivateRoute from './components/Authentication/PrivateRoute';
 import LoginPage from './pages/LoginPage';
 import DashboardPage from './pages/DashboardPage';
+import NotFoundPage from './pages/NotFoundPage';
 function App() {
   const [loggedInUser, setLoggedInUser] = useState({});
   return (
@@ -29,7 +29,7 @@ function App() {
           </PrivateRoute>
 
           <Route path="*">
-            <NotFound></NotFound>
+            <NotFoundPage></NotFoundPage>
           </Route>
         </Switch>
       </Router>

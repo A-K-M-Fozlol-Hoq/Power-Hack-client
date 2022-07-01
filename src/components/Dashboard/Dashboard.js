@@ -21,7 +21,7 @@ const Dashboard = () => {
     setIsOpen(true);
   }
   const loadBillsFromDB = (currentPageToLoad) => {
-    fetch('http://localhost:4000/api/billing-list', {
+    fetch('https://tim-sorry-00535.herokuapp.com/api/billing-list', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',

@@ -15,7 +15,7 @@ const Listing = (props) => {
   // setModalDefaultValue({ _id, fullName, email, phone, paidAmount });
   // /api/delete-billing/:id
   const deleteByID = (id) => {
-    fetch(`http://localhost:4000/api/delete-billing/${id}`, {
+    fetch(`https://tim-sorry-00535.herokuapp.com/api/delete-billing/${id}`, {
       method: 'DELETE',
       headers: {
         'Content-Type': 'application/json',

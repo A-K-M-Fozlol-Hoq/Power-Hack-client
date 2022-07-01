@@ -94,7 +94,7 @@ const ModalComponent = ({
               },
               ...billings,
             ]);
-            fetch('http://localhost:4000/api/add-billing', {
+            fetch('https://tim-sorry-00535.herokuapp.com/api/add-billing', {
               method: 'POST',
               headers: {
                 'content-type': 'application/json',
@@ -110,26 +110,35 @@ const ModalComponent = ({
               .then((response) => response.json())
               .then((data) => {
                 console.log(data, 'ok', data.insertedId);
-                closeModal();
-                setTimeout(() => {
-                  console.log(
-                    "Delayed for 0.5 second to show'Generating ID' clearly."
-                  );
+                if (data.insertedId) {
+                  closeModal();
+                  setTimeout(() => {
+                    console.log(
+                      "Delayed for 0.5 second to show'Generating ID' clearly."
+                    );
+                    const oldLists = billings.filter(checkBilling);
+                    function checkBilling(billing) {
+                      return billing._id !== 'Generating ID';
+                    }
+                    setBillings([
+                      {
+                        _id: data.insertedId,
+                        fullName: modalData.fullName,
+                        email: modalData.email,
+                        phone: modalData.phone,
+                        paidAmount: modalData.paidAmount,
+                      },
+                      ...oldLists,
+                    ]);
+                  }, 500);
+                } else {
                   const oldLists = billings.filter(checkBilling);
                   function checkBilling(billing) {
                     return billing._id !== 'Generating ID';
                   }
-                  setBillings([
-                    {
-                      _id: data.insertedId,
-                      fullName: modalData.fullName,
-                      email: modalData.email,
-                      phone: modalData.phone,
-                      paidAmount: modalData.paidAmount,
-                    },
-                    ...oldLists,
-                  ]);
-                }, 500);
+                  setBillings([...oldLists]);
+                  alert(data.msg);
+                }
               })
               .catch((error) => {
                 console.error(error, 'last');
@@ -138,6 +147,7 @@ const ModalComponent = ({
                   return billing._id !== 'Generating ID';
                 }
                 setBillings([...oldLists]);
+                alert(error.msg);
               });
           } else {
             alert('paid amount must be larger than 0 and smaller than 100000');
@@ -161,7 +171,7 @@ const ModalComponent = ({
           if (modalData.paidAmount > 0 && modalData.paidAmount < 100000) {
             console.log(modalData, 'funal');
             fetch(
-              `http://localhost:4000/api/update-billing/${modalDefaultValue._id}`,
+              `https://tim-sorry-00535.herokuapp.com/api/update-billing/${modalDefaultValue._id}`,
               {
                 method: 'PUT',
                 headers: {

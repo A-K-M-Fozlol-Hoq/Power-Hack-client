@@ -36,7 +36,7 @@ const SignUp = (props) => {
           if (signupData.password === signupData.confirmPassword) {
             console.log(signupData);
 
-            fetch('http://localhost:4000/api/registration', {
+            fetch('https://tim-sorry-00535.herokuapp.com/api/registration', {
               method: 'POST',
               headers: { 'content-type': 'application/json' },
               body: JSON.stringify({
