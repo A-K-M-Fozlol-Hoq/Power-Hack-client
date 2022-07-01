@@ -102,28 +102,34 @@ const Dashboard = () => {
       ></ModalComponent>
       <div>
         <div className="text-center">
-          {currentPage > 0 && (
-            <div
-              onClick={() => {
-                setCurrentPage(currentPage - 1);
-                loadBillsFromDB(currentPage - 1);
-              }}
-              className="btn mx-1 btn-info"
-            >
-              Prev
-            </div>
-          )}
-          <div className="btn mx-1 btn-info">{currentPage + 1}</div>
-          {(billings.length === 10 || billings.length >= 10) && (
-            <div
-              onClick={() => {
-                setCurrentPage(currentPage + 1);
-                loadBillsFromDB(currentPage + 1);
-              }}
-              className="btn mx-1 btn-info"
-            >
-              Next
-            </div>
+          {search ? (
+            <></>
+          ) : (
+            <>
+              {currentPage > 0 && (
+                <div
+                  onClick={() => {
+                    setCurrentPage(currentPage - 1);
+                    loadBillsFromDB(currentPage - 1);
+                  }}
+                  className="btn mx-1 btn-info"
+                >
+                  Prev
+                </div>
+              )}
+              <div className="btn mx-1 btn-info">{currentPage + 1}</div>
+              {(billings.length === 10 || billings.length >= 10) && (
+                <div
+                  onClick={() => {
+                    setCurrentPage(currentPage + 1);
+                    loadBillsFromDB(currentPage + 1);
+                  }}
+                  className="btn mx-1 btn-info"
+                >
+                  Next
+                </div>
+              )}
+            </>
           )}
         </div>
       </div>
