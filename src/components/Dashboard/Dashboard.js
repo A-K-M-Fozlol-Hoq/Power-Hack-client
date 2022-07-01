@@ -75,7 +75,12 @@ const Dashboard = () => {
             type="text"
             placeholder="search"
           />
-          <div className="btn btn-primary mx-2 my-2 px-5">filter</div>
+          <div
+            className="btn btn-primary mx-2 my-2 px-5"
+            onClick={() => loadBillsFromDB(currentSearchPage)}
+          >
+            filter
+          </div>
         </div>
         <div
           className="btn btn-primary"
@@ -103,7 +108,31 @@ const Dashboard = () => {
       <div>
         <div className="text-center">
           {search ? (
-            <></>
+            <>
+              {currentSearchPage > 0 && (
+                <div
+                  onClick={() => {
+                    setCurrentSearchPage(currentSearchPage - 1);
+                    loadBillsFromDB(currentSearchPage - 1);
+                  }}
+                  className="btn mx-1 btn-primary"
+                >
+                  Prev
+                </div>
+              )}
+              <div className="btn mx-1 btn-info">{currentSearchPage + 1}</div>
+              {(billings.length === 10 || billings.length >= 10) && (
+                <div
+                  onClick={() => {
+                    setCurrentSearchPage(currentSearchPage + 1);
+                    loadBillsFromDB(currentSearchPage + 1);
+                  }}
+                  className="btn mx-1 btn-primary"
+                >
+                  Next
+                </div>
+              )}
+            </>
           ) : (
             <>
               {currentPage > 0 && (
@@ -117,7 +146,7 @@ const Dashboard = () => {
                   Prev
                 </div>
               )}
-              <div className="btn mx-1 btn-info">{currentPage + 1}</div>
+              <div className="btn mx-1 btn-primary">{currentPage + 1}</div>
               {(billings.length === 10 || billings.length >= 10) && (
                 <div
                   onClick={() => {
